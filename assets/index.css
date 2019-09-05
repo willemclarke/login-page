@@ -1,4 +1,24 @@
+form {
+  margin: 0 auto;
+  width: 400px;
+  padding: 1em;
+}
+
 h1 {
-  color: red;
-  float: center;
+  margin: 0 auto;
+  width: 400px;
+  color: darkslategrey;
+  font-family: "Times New Roman";
+}
+
+input {
+  text-align: center;
+  width: 300px;
+  padding: 5px;
+  font-size: 15px;
+}
+
+button {
+  /* margin-left: 5em; */
+  width: 314px;
 }
