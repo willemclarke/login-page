@@ -4,7 +4,7 @@
 
 <head>
   <h1>Sign Up</h1>
-  <form class="input-fields" action="/create-user" method="post">
+  <form class="signup-input-fields" action="/create-user" method="post">
     <div>
       <input
         type="text"
@@ -15,10 +15,12 @@
     </div>
     <div>
       <input
-        type="text"
+        type="password"
         id="password"
         name="user_password"
-        placeholder="password:"
+        placeholder="password: min 5 characters"
+        minlength="5"
+        required
       />
     </div>
     <div class="button">

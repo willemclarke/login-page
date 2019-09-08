@@ -2,4 +2,29 @@
 <link rel="stylesheet" href="/assets/index.css" />
 <title>Login-Page</title>
 
-<h1>Log in page</h1>
+<head>
+  <h1>Log in page</h1>
+  <form class="login-input-fields" action="login-user" method="post">
+    <div>
+      <input
+        type="text"
+        id="username"
+        name="user_name"
+        placeholder="user-name:"
+      />
+    </div>
+    <div>
+      <input
+        type="password"
+        id="password"
+        name="user_password"
+        placeholder="password: min 5 characters"
+        minlength="5"
+        required
+      />
+    </div>
+    <div class="button">
+      <button type="submit">Sign Up</button>
+    </div>
+  </form>
+</head>

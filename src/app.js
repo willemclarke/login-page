@@ -6,6 +6,7 @@ let loggedIn = false;
 
 app.use(express.urlencoded());
 
+// "/create-user" is the logic for writing usernames & pw's to userdata.json
 app.post("/create-user", (req, res) => {
   const username = req.body.user_name;
   const password = req.body.user_password;
@@ -34,6 +35,7 @@ app.post("/create-user", (req, res) => {
   res.redirect("/login");
 });
 
+// "/login-user" is the logic for matching user logins against the database if successful - send to index.html
 app.post("/login-user", (req, res) => {
   loggedIn = true;
 });
