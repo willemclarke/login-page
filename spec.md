@@ -11,3 +11,7 @@ Notes for the LOGIN-PAGE
 - when user enters username and password into respective fields --> check both against the storage document
   if they match - authorise login
 - for safety - hash & salt the document
+
+-- new route /login-user
+
+-
