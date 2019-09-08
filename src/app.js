@@ -12,36 +12,37 @@ app.post("/create-user", (req, res) => {
   const password = req.body.user_password;
   console.log(username, password);
 
-  fs.readFile("../assets/userdata.json", (err, data) => {
-    if (err) throw err;
-    console.log(data);
-  });
+  let previousDatabaseState = fs.readFileSync(
+    path.join(__dirname, "../assets/userdata.json"),
+    "utf8"
+  );
+
+  if (previousDatabaseState) {
+    previousDatabaseState = JSON.parse(previousDatabaseState);
+  }
 
   const userInfo = {
-    username: {
-      username,
+    ...previousDatabaseState,
+    [username]: {
       password
     }
   };
 
   const data = JSON.stringify(userInfo, null, 2);
 
-  fs.writeFile("../assets/userdata.json", data, err => {
-    if (err) throw err;
-    console.log("Written to file");
-  });
+  fs.writeFileSync(path.join(__dirname, "../assets/userdata.json"), data);
   res.end();
 });
 
 // code associated with serving actual pages - index (signup-page) and (login-page)
-app.use(express.static("../assets"));
-
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../assets/index.html"));
-});
+app.use(express.static(path.join(__dirname, "../assets")));
 
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "../assets/login.html"));
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../assets/index.html"));
 });
 
 app.listen(process.env.port || 3000);
