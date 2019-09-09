@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const _ = require("lodash");
 const fs = require("fs");
 const Database = require("./database.js");
 const database = new Database();
-let loggedIn = false;
 
 app.use(express.urlencoded());
 
@@ -18,7 +18,16 @@ app.post("/create-user", (req, res) => {
 
 // "/login-user" is the route for checking user credentials against the databse
 app.post("/login-user", (req, res) => {
-  loggedIn = true;
+  const username = req.body.user_name;
+  const password = req.body.user_password;
+  const result = database.checkUserData(username, password);
+  console.log(result);
+  if (result) {
+    loggedIn = true;
+    res.redirect("/");
+  } else {
+    res.status(401).redirect("/login");
+  }
 });
 
 // code associated with serving actual pages - index (signup-page) and (login-page)

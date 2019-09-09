@@ -18,4 +18,9 @@ new route /login-user
 - check user login credentials against userdata.JSON
 - if they match - allow user to login and send them to index.html
 - else, error message - maybe wrong credentials? or redirect to signup page
--
+
+cookie stuff
+
+- whenever "/" route hit --> send the token they recieve to database
+- sign up - stores user + pw
+- log in --> stores a token in database, then send a token back to user
