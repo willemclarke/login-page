@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const fs = require("fs");
+const Database = require("./database.js");
+const database = new Database();
 let loggedIn = false;
 
 app.use(express.urlencoded());
@@ -10,28 +12,7 @@ app.use(express.urlencoded());
 app.post("/create-user", (req, res) => {
   const username = req.body.user_name;
   const password = req.body.user_password;
-  console.log(username, password);
-
-  let previousDatabaseState = fs.readFileSync(
-    path.join(__dirname, "../assets/userdata.json"),
-    "utf8"
-  );
-
-  // previousDatabaseState first time reading will be empty AKA undefined, === false, thus if false
-  if (previousDatabaseState) {
-    previousDatabaseState = JSON.parse(previousDatabaseState);
-  }
-
-  const userInfo = {
-    ...previousDatabaseState,
-    [username]: {
-      password
-    }
-  };
-
-  const data = JSON.stringify(userInfo, null, 2);
-
-  fs.writeFileSync(path.join(__dirname, "../assets/userdata.json"), data);
+  database.storeUserData(username, password);
   res.redirect("/login");
 });
 

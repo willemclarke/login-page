@@ -12,6 +12,10 @@ Notes for the LOGIN-PAGE
   if they match - authorise login
 - for safety - hash & salt the document
 
--- new route /login-user
+new route /login-user
 
+- create another route - have following logic:
+- check user login credentials against userdata.JSON
+- if they match - allow user to login and send them to index.html
+- else, error message - maybe wrong credentials? or redirect to signup page
 -
