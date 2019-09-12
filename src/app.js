@@ -4,10 +4,14 @@ const path = require("path");
 const _ = require("lodash");
 const fs = require("fs");
 const Database = require("./database.js");
-const database = new Database();
-loggedIn = false;
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
-app.use(express.urlencoded());
+const database = new Database();
+
+app.use(bodyParser());
+app.use(cookieParser());
+app.use(express.json());
 
 // "/create-user" is the route which stores user credentials into userdata.json via database.js
 app.post("/create-user", (req, res) => {
@@ -19,14 +23,19 @@ app.post("/create-user", (req, res) => {
 
 // "/login-user" is the route for checking user credentials against the databse
 app.post("/login-user", (req, res) => {
+  // const { username, password } = req.body;
   const username = req.body.user_name;
   const password = req.body.user_password;
   const result = database.checkUserData(username, password);
-  const cookie = res.cookie(`${username}`, { maxAge: 300000, httpOnly: true });
-  console.log(result);
   if (result) {
-    loggedIn = true;
-    database.createCookie(username, cookie);
+    const sessionValue = new Buffer(
+      `${username}:${Math.floor(Math.random() * 100000)}`
+    ).toString("base64");
+    res.cookie("session", sessionValue, {
+      maxAge: 300000,
+      httpOnly: true
+    });
+    database.storeSession(username, sessionValue); //change createCookie to storeSession
     res.redirect("/");
   } else {
     res.status(401).redirect("/login");
@@ -45,7 +54,10 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  if (loggedIn) {
+  const session = req.cookies["session"];
+  const authenticated = database.checkSessionData(session);
+  console.log(authenticated);
+  if (authenticated) {
     return res.sendFile(path.join(__dirname, "../assets/index.html"));
   } else {
     res.redirect("/login");

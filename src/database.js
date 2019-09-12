@@ -40,15 +40,37 @@ class Database {
     }
   }
 
-  createCookie(username, cookie) {
+  storeSession(username, session) {
     let currentUserData = fs.readFileSync(
       path.join(__dirname, "../assets/userdata.json"),
       "utf8"
     );
     const decodedUserInfo = JSON.parse(currentUserData);
-    const appendCookie = (decodedUserInfo[`${username}`] = `${cookie}`);
-    const data = JSON.stringify(appendCookie, null);
+    const appendSession = {
+      ...decodedUserInfo,
+      [username]: {
+        ...decodedUserInfo[username],
+        session
+      }
+    };
+    const data = JSON.stringify(appendSession, null, 2);
     fs.writeFileSync(path.join(__dirname, "../assets/userdata.json"), data);
+  }
+
+  checkSessionData(session) {
+    let userInfo = fs.readFileSync(
+      path.join(__dirname, "../assets/userdata.json"),
+      "utf8"
+    );
+    const decodedUserInfo = JSON.parse(userInfo);
+    const decodedSession = Buffer.from(session, "base64").toString();
+    const username = decodedSession.split(":")[0];
+    const foundSession = _.get(decodedUserInfo, `${username}.session`);
+    if (!foundSession) {
+      return false;
+    } else {
+      return foundSession === session;
+    }
   }
 }
 
