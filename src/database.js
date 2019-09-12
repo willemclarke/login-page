@@ -39,6 +39,17 @@ class Database {
       return foundPassword === password;
     }
   }
+
+  createCookie(username, cookie) {
+    let currentUserData = fs.readFileSync(
+      path.join(__dirname, "../assets/userdata.json"),
+      "utf8"
+    );
+    const decodedUserInfo = JSON.parse(currentUserData);
+    const appendCookie = (decodedUserInfo[`${username}`] = `${cookie}`);
+    const data = JSON.stringify(appendCookie, null);
+    fs.writeFileSync(path.join(__dirname, "../assets/userdata.json"), data);
+  }
 }
 
 module.exports = Database;

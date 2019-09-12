@@ -5,6 +5,7 @@ const _ = require("lodash");
 const fs = require("fs");
 const Database = require("./database.js");
 const database = new Database();
+loggedIn = false;
 
 app.use(express.urlencoded());
 
@@ -21,9 +22,11 @@ app.post("/login-user", (req, res) => {
   const username = req.body.user_name;
   const password = req.body.user_password;
   const result = database.checkUserData(username, password);
+  const cookie = res.cookie(`${username}`, { maxAge: 300000, httpOnly: true });
   console.log(result);
   if (result) {
     loggedIn = true;
+    database.createCookie(username, cookie);
     res.redirect("/");
   } else {
     res.status(401).redirect("/login");
